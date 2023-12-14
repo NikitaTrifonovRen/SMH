@@ -1,11 +1,16 @@
 package Web.Models;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,13 +21,38 @@ public class User {
     private String name;
     @Column
     private String adress;
+    @Column
+    private String password;
+    @ManyToMany
+    @JoinTable(name = "userRoles", joinColumns = @JoinColumn(
+            name = "userId", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+            name = "roleId", referencedColumnName = "id"))
+    private List<Role> userRoles;
+
+    public List<Role> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(List<Role> userRoles) {
+        this.userRoles = userRoles;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public User(){
 
     }
-    public User(String name, String adress){
+    public User(String name, String adress, String password){
         this.name = name;
         this.adress =adress;
+        this.password = password;
     }
 
     public int getId() {
@@ -52,9 +82,12 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id1=" + id +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", adress='" + adress + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
+
+
 }

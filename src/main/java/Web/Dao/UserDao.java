@@ -12,6 +12,7 @@ public interface UserDao {
     void removeUser(int id);
     User showUser(int id);
     void updateUserParams(int id, User user);
+    User findByName(String name);
 
 
 }

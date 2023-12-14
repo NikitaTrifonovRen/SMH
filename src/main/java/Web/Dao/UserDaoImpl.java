@@ -60,4 +60,11 @@ public class UserDaoImpl implements UserDao{
         entityManager.getTransaction().commit();
         entityManager.close();
     }
+    @Override
+    public User findByName(String name) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        User user = entityManager.find(User.class,name);
+        System.out.println(user.toString());
+        return user;
+    }
 }
