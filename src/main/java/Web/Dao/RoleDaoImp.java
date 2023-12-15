@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 
 @Repository
 public class RoleDaoImp implements RoleDao {
@@ -15,7 +16,10 @@ public class RoleDaoImp implements RoleDao {
     @Override
     public Role showRole(String name) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        Role role = entityManager.find(Role.class,name);
+        Query query = entityManager.createQuery(
+                "SELECT r FROM Role r WHERE r.name = :name", Role.class);
+        query.setParameter("name", name);
+        Role role = (Role) query.getSingleResult();
         System.out.println(role.toString());
         return role;
     }

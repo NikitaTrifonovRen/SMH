@@ -3,6 +3,7 @@ package Web;
 import Web.Config.HiberConfig;
 import Web.Models.Role;
 import Web.Models.User;
+import Web.Service.RoleService;
 import Web.Service.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -15,11 +16,15 @@ public class Main {
         AnnotationConfigApplicationContext context =
                 new AnnotationConfigApplicationContext(HiberConfig.class);
         UserService userService = context.getBean(UserService.class);
+        RoleService roleService = context.getBean(RoleService.class);
         Role admin = new Role("admin");
         List<Role> adminRole = new ArrayList<>();
         adminRole.add(admin);
-        User newUser = userService.showUser(1);
-        System.out.println(newUser.toString());
+        User newUser = userService.findByName("admin1");
+        System.out.println(newUser.getUserRoles().toString());
+        Role newRole = roleService.showRole("user");
+
+
 
 
 

@@ -1,6 +1,8 @@
 package Web.Config;
 
+import Web.Dao.UserDao;
 import Web.Service.CustomUserDetailService;
+import Web.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +19,8 @@ import Web.Config.handler.LoginSuccessHandler;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
+    private UserService userService;
+    @Autowired
     CustomUserDetailService customUserDetailService;
 
     @Override
@@ -30,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // указываем страницу с формой логина
                 .loginPage("/login")
                 //указываем логику обработки при логине
-                .successHandler(new LoginSuccessHandler())
+                .successHandler(new LoginSuccessHandler(userService))
                 // указываем action с формы логина
                 .loginProcessingUrl("/login")
                 // Указываем параметры логина и пароля с формы логина
@@ -54,8 +58,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 //страницы аутентификаци доступна всем
                 .antMatchers("/login").anonymous()
+
                 // защищенные URL
-                .antMatchers("/hallo").access("hasAnyRole('admin')").anyRequest().authenticated();
+                .antMatchers("/admin/**").access("hasAnyAuthority('admin')")
+                .antMatchers("/user/**").access("hasAnyAuthority('user','admin')").anyRequest().authenticated();
+
+
+
     }
 
     @Bean
