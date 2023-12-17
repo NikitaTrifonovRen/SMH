@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 @Service
 public class CustomUserDetailService implements UserDetailsService {
     @Autowired
-    private UserDao userDao;
+    private UserService userService;
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        User user = userDao.findByName(name);
+        User user = userService.findByName(name);
         UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
                 .username(user.getName())
                 .password(user.getPassword())
